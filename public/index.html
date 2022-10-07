@@ -24,9 +24,9 @@
           <tr>
             <th>Id</th>
             <th>Email</th>
-            <th>Name</th>
+            <th>First name</th>
+            <th>Last name</th>
             <th>Phone</th>
-            <th>Address</th>
             <th>Hobbies</th>
           </tr>
           </thead>
@@ -37,7 +37,6 @@
       <p id="errorMsgFindAllPersons" style="color:red"></p>
       <div class="row" style="min-height: 5em">
         <div class="col-md-4" style="background-color: powderblue">
-
           <h5>Add Person</h5>
           <form id="AddPersonForm">
             <input type="text" id="addEmail" placeholder="Email"/>
@@ -47,7 +46,17 @@
           </form>
           <p id="AddPersonSuccess"></p>
         </div>
+      </div>
+        <div class="row" style="min-height: 5em">
+          <div class="col-md-4" style="background-color: powderblue">
+            <h5>Delete Person</h5>
+            <form id="DeletePersonForm">
+              <input type="number" id="deletePersonId" placeholder="Person's id">
+              <input type="button" value="Delete" id="deletePersonButton">
+            </form>
+            <p id="DeletePersonSuccess"></p>
         </div>
+      </div>
     </div>
 
 

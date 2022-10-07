@@ -8,9 +8,11 @@ import addressFacade from "./addressFacade";
 import {SERVER_URL} from "../constants";
 
 document.getElementById("all-content").style.display = "block"
-const errorMessageFindAllPersons = document.getElementById("errorMsgFindAllPersons")
+
 const errorMessageFindAllHobbies = document.getElementById("errorMsgFindAllHobbies")
 const addPersonButton = document.getElementById("addPersonButton")
+const deletePersonButton = document.getElementById("deletePersonButton")
+
 
 
 /* 
@@ -19,34 +21,8 @@ const addPersonButton = document.getElementById("addPersonButton")
 
 /* JS For Person below */
 
-const getAllPersons = () => {
-  personFacade.getAllPersons()
-      .then(persons => {
-        const arr = persons.map(row =>
-            `<tr> 
-            <td>${row.id}</td>
-            <td>${row.email}</td>
-            <td>${row.firstName} ${row.lastName}</td>
-            <td>Brand: ${row.phones.map(phone => {
-              return phone.description.charAt(0).toUpperCase() + phone.description.slice(1) +"<br>"+ " Number:  "+ phone.number
-            })}</td>
-             
-            <td>${row.hobbies.map(hobby => {
-            return hobby.description
-            })}</td>
-          </tr>`).join("")
-        document.getElementById("tableBody").innerHTML = arr
-      })
-      .catch(err => {
-        if (err.status) {
-          err.fullError.then(e => errorMessageFindAllPersons.innerText = e.msg)
-        } else {
-          errorMessageFindAllPersons.innerText = "Network error"
-        }
-      })
-}
-getAllPersons();
-addPersonButton.addEventListener("click", personFacade.addPerson)
+deletePersonButton.addEventListener("click",personFacade.deletePerson)
+addPersonButton.addEventListener("click", personFacade.addPerson);
 
 /* JS For Hobbies below */
 const getAllHobbies = () => {
@@ -71,6 +47,7 @@ const getAllHobbies = () => {
         })
 }
 getAllHobbies();
+personFacade.getAllPersons();
 
 /* JS For Addresses below */
 
@@ -94,15 +71,24 @@ function menuItemClicked(evt)
     const id = evt.target.id;
     switch (id)
     {
-        case "ex1": hideAllShowOne("ex1_html"); break
-        case "ex2": hideAllShowOne("ex2_html"); break
-        case "ex3": hideAllShowOne("ex3_html"); break
+        case "ex1":
+
+            hideAllShowOne("ex1_html");
+            break
+
+        case "ex2":
+
+            hideAllShowOne("ex2_html");
+        break
+
+        case "ex3":
+            hideAllShowOne("ex3_html");
+            break
         default: hideAllShowOne("about_html"); break
     }
     evt.preventDefault();
 }
 document.getElementById("menu").onclick = menuItemClicked;
 hideAllShowOne("about_html");
-
 
 

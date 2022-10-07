@@ -21,6 +21,8 @@ const handleHttpErrors = (res) => {
     }
     return res.json()
 }
+
+
 const getAllHobbies = () => {
     return fetch("https://cphcn332.dk/ca1_application/api/hobby")
         .then(handleHttpErrors)

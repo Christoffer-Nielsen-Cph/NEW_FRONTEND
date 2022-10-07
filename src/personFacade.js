@@ -1,4 +1,64 @@
 import {SERVER_URL} from '../constants'
+const errorMessageFindAllPersons = document.getElementById("errorMsgFindAllPersons")
+
+const getAllPersons = () => {
+    return fetch(SERVER_URL+"/all")
+        .then(handleHttpErrors)
+        .then(persons => {
+            const arr = persons.map(row =>
+                `<tr> 
+            <td>${row.id}</td>
+            <td>${row.email}</td>
+            <td>${row.firstName}</td>
+            <td>${row.lastName}</td>
+            <td>${row.phones.map(phone => {
+                    return phone.number
+                })}</td> 
+            <td>${row.hobbies.map(hobby => {
+                    return hobby.description
+                })}</td>
+          </tr>`).join("")
+            document.getElementById("tableBody").innerHTML = arr
+        })
+        .catch(err => {
+            if (err.status) {
+                err.fullError.then(e => errorMessageFindAllPersons.innerText = e.msg)
+            } else {
+                errorMessageFindAllPersons.innerText = "Network error"
+            }
+        })
+}
+
+const addPerson = () => {
+    const AddPersonSuccess = document.getElementById("AddPersonSuccess")
+    const inputNewPersonEmail = document.getElementById("addEmail")
+    const inputNewPersonFName = document.getElementById("addFirstName")
+    const inputNewPersonLName = document.getElementById("addLastName")
+
+    const jsonPerson = {
+        email: inputNewPersonEmail.value,
+        firstName: inputNewPersonFName.value,
+        lastName: inputNewPersonLName.value
+
+    }
+    const options = makeOptions("POST",jsonPerson)
+    fetch(SERVER_URL+"/addperson", options)
+        .then((response) => response.json())
+        .then((data) => (AddPersonSuccess.innerHTML = "You've successfully added a person!"))
+        .then(getAllPersons);
+}
+
+
+const deletePerson = () => {
+    const DeletePersonSuccess = document.getElementById("DeletePersonSuccess")
+    const options = makeOptions("DELETE")
+    const deletePersonInput = document.getElementById("deletePersonId")
+    fetch(SERVER_URL+"/"+deletePersonInput.value,options)
+        .then((response) => response.json())
+        .then((data) => (DeletePersonSuccess.innerHTML = "You've successfully deleted a person!"))
+        .then(getAllPersons);
+}
+
 
 function makeOptions(method, body) {
     var opts =  {
@@ -14,53 +74,6 @@ function makeOptions(method, body) {
     return opts;
 }
 
-const getAllPersons = () => {
-    return fetch(SERVER_URL+"/all")
-        .then(handleHttpErrors)
-}
-
-function getPersonById(id){
-    return fetch(SERVER_URL+"/"+id)
-        .then(handleHttpErrors);
-};
-
-function getPersonByPhoneNumber(phoneNumber){
-    return fetch(SERVER_URL+"/byPhoneNumber/"+phoneNumber)
-        .then(handleHttpErrors);
-};
-
-function getPersonsByZip(zip){
-    return fetch(SERVER_URL+"/byZip/"+zip)
-        .then(handleHttpErrors);
-};
-
-function countPersonsWithHobby(hobby){
-    return fetch(SERVER_URL+"/hobbyCount/"+hobby)
-        .then(handleHttpErrors);
-};
-
-const addPerson = () => {
-    const addForm = document.getElementById("AddPersonForm")
-    var url = "http://localhost:8080/ca1_application_war_exploded/api/person/addperson"
-    const AddPersonSuccess = document.getElementById("AddPersonSuccess")
-    const inputNewPersonEmail = document.getElementById("addEmail")
-    const inputNewPersonFName = document.getElementById("addFirstName")
-    const inputNewPersonLName = document.getElementById("addLastName")
-
-    const jsonPerson = {
-        email: inputNewPersonEmail.value,
-        firstName: inputNewPersonFName.value,
-        lastName: inputNewPersonLName.value
-
-    }
-    console.log(JSON.stringify(jsonPerson))
-    const options = makeOptions("POST",jsonPerson)
-    fetch(url, options)
-        .then((response) => response.json())
-        .then((data) => (AddPersonSuccess.innerHTML = "You've successfully added a person!"));
-}
-
-
 function handleHttpErrors(res){
     if(!res.ok){
         return Promise.reject({status: res.status, fullError: res.json() })
@@ -68,15 +81,9 @@ function handleHttpErrors(res){
     return res.json();
 }
 
-
-
-
 const personFacade = {
     getAllPersons,
-    getPersonById,
-    getPersonByPhoneNumber,
-    getPersonsByZip,
-    countPersonsWithHobby,
+    deletePerson,
     addPerson,
 };
 
