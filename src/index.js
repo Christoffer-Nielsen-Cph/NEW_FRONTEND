@@ -30,7 +30,7 @@ const getAllPersons = () => {
             <td>Brand: ${row.phones.map(phone => {
               return phone.description.charAt(0).toUpperCase() + phone.description.slice(1) +"<br>"+ " Number:  "+ phone.number
             })}</td>
-            <td>${row.address.address} ${row.address.additionalInfo} <br> ${row.address.cityInfo.zipCode} ${row.address.cityInfo.city}</td> 
+             
             <td>${row.hobbies.map(hobby => {
             return hobby.description
             })}</td>
