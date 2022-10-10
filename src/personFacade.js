@@ -59,6 +59,10 @@ const deletePerson = () => {
         .then(getAllPersons);
 }
 
+const getPersonByPhone = () => {
+
+}
+
 
 function makeOptions(method, body) {
     var opts =  {
